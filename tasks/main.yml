@@ -1,0 +1,6 @@
+---
+- name: install | postgreSQL
+  apt: name=postgresql
+
+- include: create-su.yml
+  when: psql_remote_access
