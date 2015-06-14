@@ -36,7 +36,7 @@ Create directories:
 
     /dir/
        |--roles\
-       |      |--psql
+       |      |--psql\
        |           |--files of this role
        |--hosts
        |--psql.yml
