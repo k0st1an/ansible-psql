@@ -29,6 +29,42 @@ psql_remote_db                : engineer
 psql_remote_host              : 0.0.0.0/0
 ```
 
+Usage (example)
+---------------
+
+Create directories:
+
+/dir/
+   |--roles\
+   |      |--psql
+   |           |--files of this role
+   |--hosts
+   |--psql.yml
+
+
+Contents of the `hosts`:
+
+```
+[psql]
+a.b.c.d
+```
+
+Contents of the `psql.yml`:
+
+```yaml
+---
+- hosts: psql
+  remote_user: root
+
+  roles:
+    - psql
+```
+
+And launch playbook:
+
+    $ ansible-playbook -i hosts psql.yml
+
+
 
 License
 -------
@@ -38,8 +74,6 @@ MIT
 Author Information
 ------------------
 
-GitHub: https://github.com/k0st1an
-
-Author: Konstantin Kruglov
-
-Contact: kruglovk@gmain.com
+  - Author: Konstantin Kruglov
+  - GitHub: https://github.com/k0st1an
+  - Contact: kruglovk@gmain.com

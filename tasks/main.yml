@@ -1,6 +1,10 @@
 ---
 - name: install | postgreSQL
-  apt: name=postgresql
+  apt: name={{ item }} update_cache=yes cache_valid_time=3600
+  with_items:
+    - sudo
+    - postgresql
+    - python-psycopg2
 
 - include: create-su.yml
   when: psql_remote_access
