@@ -34,12 +34,12 @@ Usage (example)
 
 Create directories:
 
-  /dir/
-     |--roles\
-     |      |--psql
-     |           |--files of this role
-     |--hosts
-     |--psql.yml
+    /dir/
+       |--roles\
+       |      |--psql
+       |           |--files of this role
+       |--hosts
+       |--psql.yml
 
 
 Contents of the `hosts`:
