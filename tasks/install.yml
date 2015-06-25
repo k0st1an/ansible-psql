@@ -1,0 +1,20 @@
+---
+- name: Add key for repository of PostgreSQL
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+  register: added_key_pgsql
+
+- name: Add repository of PostgreSQL
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+  when: added_key_pgsql.changed
+
+- name: Install PostgreSQL
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - postgresql-{{ pgsql_version }}
+    - sudo
+    - python-psycopg2

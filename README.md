@@ -1,7 +1,8 @@
 ansible-psql
 ============
 
-Deploy PostgreSQL latest version.
+Deploy PostgreSQL.
+
 
 Tested
 ------
@@ -9,61 +10,46 @@ Tested
   - Debian Jessie
   - ansible v1.9.1
 
+
 Synopsis
 --------
 
   - Install PostgreSQL
-  - Create super user (optional)
+  - Create user (optional, default is disable)
+  - Remote access for user (optional, default is disable)
 
 
 Role Variables
 --------------
 
-Content of the `vars/main.yml`:
+You can see all variable of role in file `default/main.yml`.
 
-```yaml
-psql_remote_access            : yes
-psql_remote_user              : engineer
-psql_remote_pass              : SOMEPASSWORD
-psql_remote_db                : engineer
-psql_remote_host              : 0.0.0.0/0
-```
 
-Usage (example)
----------------
+Project structure
+-----------------
 
 Create directories:
 
-    /dir/
-       |--roles\
-       |      |--psql\
-       |           |--files of this role
-       |--hosts
-       |--psql.yml
 
-
-Contents of the `hosts`:
-
-```
-[psql]
-a.b.c.d
-```
-
-Contents of the `psql.yml`:
-
-```yaml
----
-- hosts: psql
-  remote_user: root
-
-  roles:
-    - psql
-```
-
-And launch playbook:
-
-    $ ansible-playbook -i hosts psql.yml
-
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    │   ├── pg_hba-9.4.conf.orig
+    │   └── postgresql-9.4.conf.orig
+    ├── handlers
+    │   └── main.yml
+    ├── LICENSE
+    ├── meta
+    │   └── main.yml
+    ├── README.md
+    ├── tasks
+    │   ├── configuration.yml
+    │   ├── install.yml
+    │   ├── main.yml
+    │   ├── preparation.yml
+    │   └── user.yml
+    └── templates
+        └── pg_hba.conf.j2
 
 
 License
