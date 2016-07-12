@@ -1,5 +1,0 @@
----
-- name: Ensure the locale is generated
-  locale_gen:
-    name: "{{ pgsql_locale }}"
-    state: present

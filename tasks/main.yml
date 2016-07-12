@@ -1,7 +1,73 @@
 ---
-- include: preparation.yml
-- include: install.yml
-- include: configuration.yml
+- name: Ensure the locale is generated
+  locale_gen:
+    name: "{{ psql_locale }}"
+    state: present
 
-- include: user.yml
-  when: pgsql_create_user
+- name: Add key for repository of PostgreSQL
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: Add repository of PostgreSQL
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+
+- name: "Install PostgreSQL v{{ psql_version }}"
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  with_items:
+    - "postgresql-{{ psql_version }}"
+    - sudo
+    - python-psycopg2
+
+- name: Update postgresql.conf
+  tags:
+    - psql-postgresql-conf
+  template:
+    src: postgresql.conf.j2
+    dest: /etc/postgresql/{{ psql_version }}/main/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: 0644
+  notify: restart postgresql
+
+- name: Update pg_hba.conf
+  tags:
+    psql-hba-conf
+  debug:
+    msg: "{{ psql_users }}"
+
+- name: Update pg_hba.conf
+  tags:
+    psql-hba-conf
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/{{ psql_version }}/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    backup: yes
+  # notify: restart postgresql
+
+- name: Create user
+  become_user: postgres
+  postgresql_user:
+    name: "{{ item.value.name }}"
+    password: "{{ item.value.password }}"
+    role_attr_flags: "{{ item.value.priv }}"
+  with_dict: "{{ psql_users }}"
+  when: psql_create_user
+
+- name: Create database for user
+  become_user: postgres
+  postgresql_db:
+    name: "{{ item.value.name }}"
+    owner: "{{ item.value.name }}"
+    encoding: "{{ psql_encoding }}"
+    lc_collate: "{{ psql_locale }}"
+    lc_ctype: "{{ psql_locale }}"
+    template: "{{ psql_template }}"
+  with_dict: "{{ psql_users }}"
+  when: psql_create_user

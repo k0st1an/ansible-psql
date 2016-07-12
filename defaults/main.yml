@@ -1,30 +1,24 @@
 ---
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # File: defaults/main.yml
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Server
-pgsql_version           : "9.4"
-pgsql_tcpip_enable      : false
-pgsql_listen_address    : "localhost"  # *, localhost, 127.0.0.1
-pgsql_listen_port       : 5432
-pgsql_encoding          : "UTF-8"
-pgsql_locale            : "en_US.UTF-8"
-pgsql_template          : "template0"
+psql_version           : "9.5"
+psql_tcpip_enable      : false
+psql_listen_address    : "localhost"  # *, localhost, 127.0.0.1
+psql_listen_port       : 5432
+psql_encoding          : "UTF-8"
+psql_locale            : "en_US.UTF-8"
+psql_template          : "template0"
+psql_create_users      : True
 
-pgsql_pg_hba:
-  - { enable: true, type: "local", database: "all", user: "all", address: "", method: "md5"}
-  - { enable: true, type: "host",  database: "all", user: "all", address: "127.0.0.1/32", method: "md5"}
-  - { enable: true, type: "host",  database: "all", user: "all", address: "::1/128", method: "md5"}
-  - { enable: false, type: "{{ pgsql_ra_type }}",  database: "{{ pgsql_user_db }}", user: "{{ pgsql_user_name }}", address: "{{ pgsql_ra_host }}", method: "{{ pgsql_ra_method }}"}
-
-# Add user
-pgsql_create_user       : false
-pgsql_user_name         : "engineer"
-pgsql_user_db           : "{{ pgsql_user_name }}"
-pgsql_user_password     : "PASSWORD"
-pgsql_user_priv         : "SUPERUSER"
-# remote access
-# not forget enable rule of pgsql_pg_hba for remote access if necessary
-pgsql_ra_type           : "hostssl"
-pgsql_ra_host           : "0.0.0.0/0"
-pgsql_ra_method         : "md5"
+psql_users:
+  k0st1an:
+    enable: "{{ psql_create_users }}"
+    name: 'k0st1an'
+    password: '42'
+    db: 'k0st1an'
+    priv: 'SUPERUSER'
+    ra_type: "hostssl"
+    ra_host: "0.0.0.0/0"
+    ra_method: "md5"

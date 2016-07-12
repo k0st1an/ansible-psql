@@ -17,13 +17,18 @@
 # (The uppercase items must be replaced by actual values.)
 #
 
+# DO NOT DISABLE!
 # Database administrative login by Unix domain socket
 local   all             postgres                                peer
 
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
+local   all             all                                     md5
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
 
-{% for connect in pgsql_pg_hba %}
-{% if connect.enable %}
-{{ connect.type }}    {{  connect.database }}    {{ connect.user }}    {{ connect.address }}   {{ connect.method }}
+{% for user in psql_users %}
+{{ user.key }}
+{% if user.enable %}
+{{ user.ra_type }}    {{ user.db }}     {{ user.name }} {{ user.ra_host }} {{ user.ra_method }}
 {% endif %}
 {% endfor %}
