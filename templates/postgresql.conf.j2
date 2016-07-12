@@ -1,4 +1,4 @@
-# Ansible managed: /home/k0st1an/develop/ansible/ansible-psql/templates/postgresql.conf.j2 modified on 2016-07-12 13:23:31 by k0st1an on n3.k0b1.net
+# {{ ansible_managed }}
 
 # -----------------------------
 # PostgreSQL configuration file
@@ -59,7 +59,7 @@ external_pid_file = '/var/run/postgresql/9.5-main.pid'			# write an extra PID fi
 # - Connection Settings -
 
 
-listen_addresses = '{{ psql_listen_address }}'		# what IP address(es) to listen on;
+listen_addresses = '{{ psql_listen_address|join(',') }}'		# what IP address(es) to listen on;
 					# comma-separated list of addresses;
 					# defaults to 'localhost'; use '*' for all
 					# (change requires restart)
@@ -81,7 +81,7 @@ unix_socket_directories = '/var/run/postgresql'	# comma-separated list of direct
 # - Security and Authentication -
 
 #authentication_timeout = 1min		# 1s-600s
-ssl = true				# (change requires restart)
+ssl = {{ psql_ssl }}				# (change requires restart)
 #ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL' # allowed SSL ciphers
 					# (change requires restart)
 #ssl_prefer_server_ciphers = on		# (change requires restart)

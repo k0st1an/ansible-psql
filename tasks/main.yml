@@ -1,16 +1,20 @@
 ---
+# file: tasks/main.yml
+
 - name: Ensure the locale is generated
   locale_gen:
     name: "{{ psql_locale }}"
     state: present
 
-- name: Add key for repository of PostgreSQL
-  apt_key:
-    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-
 - name: Add repository of PostgreSQL
   apt_repository:
     repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+  register: psql_add_repo
+
+- name: Add key for repository of PostgreSQL
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+  when: psql_add_repo.changed
 
 - name: "Install PostgreSQL v{{ psql_version }}"
   apt:
@@ -28,46 +32,61 @@
     - psql-postgresql-conf
   template:
     src: postgresql.conf.j2
-    dest: /etc/postgresql/{{ psql_version }}/main/postgresql.conf
-    owner: postgres
-    group: postgres
+    dest: "/etc/postgresql/{{ psql_version }}/main/postgresql.conf"
+    owner: "{{ psql_admin_user }}"
+    group: "{{ psql_admin_user }}"
     mode: 0644
   notify: restart postgresql
 
 - name: Update pg_hba.conf
   tags:
-    psql-hba-conf
-  debug:
-    msg: "{{ psql_users }}"
-
-- name: Update pg_hba.conf
-  tags:
-    psql-hba-conf
+    - psql-hba-conf
   template:
     src: pg_hba.conf.j2
-    dest: /etc/postgresql/{{ psql_version }}/main/pg_hba.conf
-    owner: postgres
-    group: postgres
-    backup: yes
-  # notify: restart postgresql
+    dest: "/etc/postgresql/{{ psql_version }}/main/pg_hba.conf"
+    owner: "{{ psql_admin_user }}"
+    group: "{{ psql_admin_user }}"
+    # backup: yes
+  notify: restart postgresql
 
 - name: Create user
-  become_user: postgres
+  tags:
+    - psql-user
+  become: yes
+  become_user: "{{ psql_admin_user }}"
   postgresql_user:
-    name: "{{ item.value.name }}"
-    password: "{{ item.value.password }}"
-    role_attr_flags: "{{ item.value.priv }}"
-  with_dict: "{{ psql_users }}"
-  when: psql_create_user
+    name: "{{ item.name }}"
+    password: "{{ item.pass }}"
+  with_items: "{{ psql_users }}"
 
 - name: Create database for user
-  become_user: postgres
+  tags:
+    - psql-db
+  become: yes
+  become_user: "{{ psql_admin_user }}"
   postgresql_db:
-    name: "{{ item.value.name }}"
-    owner: "{{ item.value.name }}"
+    name: "{{ item.name }}"
+    owner: "{{ item.owner }}"
     encoding: "{{ psql_encoding }}"
     lc_collate: "{{ psql_locale }}"
     lc_ctype: "{{ psql_locale }}"
-    template: "{{ psql_template }}"
-  with_dict: "{{ psql_users }}"
-  when: psql_create_user
+    template: "template0"
+  with_items: "{{ psql_dbs }}"
+
+- name: Setting permissions
+  tags:
+    - psql-permission
+  become: yes
+  become_user: "{{ psql_admin_user }}"
+  postgresql_user:
+    name: "{{ item.name }}"
+    db: "{{ item.db }}"
+    role_attr_flags: "{{ item.flags }}"
+  with_items: "{{ psql_user_priv }}"
+
+- tags:
+    - tt
+  debug:
+    msg: "{{ item }}"
+  with_items:
+    - "{{ psql_hba }}"

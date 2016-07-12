@@ -1,4 +1,6 @@
 ---
+# file: meta/main.yml
+
 galaxy_info:
   author: Konstantin Kruglov
   description: Deploy PostgreSQL

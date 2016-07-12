@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 # PostgreSQL Client Authentication Configuration File
 # ===================================================
 #
@@ -17,18 +19,15 @@
 # (The uppercase items must be replaced by actual values.)
 #
 
+# https://www.postgresql.org/docs/9.5/static/auth-pg-hba-conf.html
 # DO NOT DISABLE!
 # Database administrative login by Unix domain socket
-local   all             postgres                                peer
-
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
-local   all             all                                     md5
-host    all             all             127.0.0.1/32            md5
-host    all             all             ::1/128                 md5
-
-{% for user in psql_users %}
-{{ user.key }}
-{% if user.enable %}
-{{ user.ra_type }}    {{ user.db }}     {{ user.name }} {{ user.ra_host }} {{ user.ra_method }}
-{% endif %}
+{% for r in psql_hba %}
+{{ r.type }}        {{ r.db }}      {{ r.user }}      {{ r.address }}       {{ r.method }}
 {% endfor %}
+
+# local   all             postgres                                peer
+# local   all             all                                     peer
+# for IPv4/IPv6
+# host    all             all             localhost            trust

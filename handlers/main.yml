@@ -1,5 +1,7 @@
 ---
+# file: handlers/main.yml
+
 - name: restart postgresql
   service:
-    name: "postgresql@{{psql_version}}"
+    name: "postgresql@{{psql_version}}-main"
     state: restarted
