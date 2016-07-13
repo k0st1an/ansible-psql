@@ -6,15 +6,13 @@
     name: "{{ psql_locale }}"
     state: present
 
-- name: Add repository of PostgreSQL
-  apt_repository:
-    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
-  register: psql_add_repo
-
 - name: Add key for repository of PostgreSQL
   apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-  when: psql_add_repo.changed
+
+- name: Add repository of PostgreSQL
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
 
 - name: "Install PostgreSQL v{{ psql_version }}"
   apt:
@@ -46,7 +44,7 @@
     dest: "/etc/postgresql/{{ psql_version }}/main/pg_hba.conf"
     owner: "{{ psql_admin_user }}"
     group: "{{ psql_admin_user }}"
-    # backup: yes
+    mode: 0600
   notify: restart postgresql
 
 - name: Create user
@@ -59,7 +57,7 @@
     password: "{{ item.pass }}"
   with_items: "{{ psql_users }}"
 
-- name: Create database for user
+- name: Create database
   tags:
     - psql-db
   become: yes
@@ -83,10 +81,3 @@
     db: "{{ item.db }}"
     role_attr_flags: "{{ item.flags }}"
   with_items: "{{ psql_user_priv }}"
-
-- tags:
-    - tt
-  debug:
-    msg: "{{ item }}"
-  with_items:
-    - "{{ psql_hba }}"

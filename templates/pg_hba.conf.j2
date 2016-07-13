@@ -26,8 +26,3 @@
 {% for r in psql_hba %}
 {{ r.type }}        {{ r.db }}      {{ r.user }}      {{ r.address }}       {{ r.method }}
 {% endfor %}
-
-# local   all             postgres                                peer
-# local   all             all                                     peer
-# for IPv4/IPv6
-# host    all             all             localhost            trust

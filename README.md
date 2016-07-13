@@ -6,53 +6,35 @@ ansible-psql
 Deploy PostgreSQL.
 
 
-Tested
-------
-
-  - Debian Jessie
-  - ansible v1.9.1
-
-
-Synopsis
---------
-
-  - Install PostgreSQL
-  - Create user (optional, default is disable)
-  - Remote access for user (optional, default is disable)
-
-
 Role Variables
 --------------
 
-You can see all variable of role in file `default/main.yml`.
+You can see all variable of role in file `default/main.yml`. Simple example some vars:
 
+    psql_users:
+      - name: k0st1an
+        pass: 42
 
-Project structure
------------------
+    psql_dbs:
+      - name: k0st1an
+        owner: k0st1an
 
-Create directories:
+    psql_user_priv:
+      - name: k0st1an
+        db: k0st1an
+        flags: "LOGIN"
 
-
-    ├── defaults
-    │   └── main.yml
-    ├── files
-    │   ├── pg_hba-9.4.conf.orig
-    │   └── postgresql-9.4.conf.orig
-    ├── handlers
-    │   └── main.yml
-    ├── LICENSE
-    ├── meta
-    │   └── main.yml
-    ├── README.md
-    ├── tasks
-    │   ├── configuration.yml
-    │   ├── install.yml
-    │   ├── main.yml
-    │   ├── preparation.yml
-    │   └── user.yml
-    └── templates
-        └── pg_hba.conf.j2
-
+    psql_hba:
+      - type: 'local'
+        db: 'all'
+        user: 'postgres'
+        address: ''
+        method: 'peer'
+      - type: hostssl
+        db: k0st1an
+        user: k0st1an
+        address: localhost
+        method: md5
 
 License
 -------

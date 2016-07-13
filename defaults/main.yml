@@ -6,18 +6,9 @@ psql_encoding:      "UTF-8"
 psql_locale:        "en_US.UTF-8"
 psql_admin_user:    "postgres"
 
-psql_users:
-  - name: k0st1an
-    pass: 42
-
-psql_dbs:
-  - name: k0st1an
-    owner: k0st1an
-
-psql_user_priv:
-  - name: k0st1an
-    db: k0st1an
-    flags: "LOGIN"
+psql_users: []
+psql_dbs: []
+psql_user_priv: []
 
 # pg_hba.conf
 psql_hba:
@@ -26,14 +17,9 @@ psql_hba:
     user: 'postgres'
     address: ''
     method: 'peer'
-  - type: hostssl
-    db: k0st1an
-    user: k0st1an
-    address: localhost
-    method: md5
 
 # postgresql.conf
 psql_listen_address:
-  - "*"  # *, localhost, 127.0.0.1
+  - "localhost"   # *, localhost, 127.0.0.1
 psql_listen_port:   5432
 psql_ssl:           true
