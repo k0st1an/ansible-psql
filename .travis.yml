@@ -10,19 +10,19 @@ branches:
 # Use the new container infrastructure
 sudo: required
 
-virtualenv:
-  system_site_packages: true
+# virtualenv:
+#   system_site_packages: true
 
 # Install ansible
 addons:
   apt:
     packages:
     - python-pip
-    - python-apt
+    # - python-apt
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install ansible python-apt
 
   # Check ansible version
   - ansible --version
