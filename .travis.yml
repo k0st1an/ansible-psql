@@ -25,6 +25,9 @@ install:
   - pip install ansible
 
 script:
+  - sudo dpkg -l | grep postgresql
+  - cat tests/inventory
+
   # Check ansible version
   - ansible --version
 
@@ -33,7 +36,7 @@ script:
 
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
+  # - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
