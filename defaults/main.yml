@@ -5,6 +5,7 @@ psql_version:       "9.5"
 psql_encoding:      "UTF-8"
 psql_locale:        "en_US.UTF-8"
 psql_admin_user:    "postgres"
+psql_service_name:  "postgresql@{{ psql_version }}-main"
 
 psql_users: []
 psql_dbs: []

@@ -1,6 +1,12 @@
 ---
 # file: tasks/main.yml
 
+- name: Define service name for Ubuntu
+  set_fact:
+    psql_service_name: "postgresql"
+  when: ansible_distribution == 'Ubuntu'
+  tags: [always]
+
 - name: Ensure the locale is generated
   locale_gen:
     name: "{{ psql_locale }}"
@@ -35,7 +41,7 @@
     owner: "{{ psql_admin_user }}"
     group: "{{ psql_admin_user }}"
     mode: 0644
-  notify: restart postgresql
+  notify: "restart postgresql_{{ ansible_distribution }}"
 
 - name: Update pg_hba.conf
   tags:
@@ -46,7 +52,7 @@
     owner: "{{ psql_admin_user }}"
     group: "{{ psql_admin_user }}"
     mode: 0600
-  notify: restart postgresql
+  notify: "restart postgresql_{{ ansible_distribution }}"
 
 - name: Create user
   tags:

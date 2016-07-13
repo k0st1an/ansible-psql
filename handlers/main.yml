@@ -1,7 +1,15 @@
 ---
 # file: handlers/main.yml
 
-- name: restart postgresql
+# for debian
+- name: restart postgresql_Debian
   service:
-    name: "postgresql@{{psql_version}}-main"
+    name: "{{ psql_service_name }}"
     state: restarted
+
+# for ubuntu
+- name: restart postgresql_Ubuntu
+  service:
+    name: "{{ psql_service_name }}"
+    state: restarted
+  args: "{{ psql_version }}/main"
