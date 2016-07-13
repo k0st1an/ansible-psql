@@ -25,16 +25,13 @@ before_install:
   - sudo apt-get autoremove
   - sudo rm -rf /var/lib/postgresql
   - sudo rm -rf /etc/postgresql
+  - sudo rm /etc/apt/sources.list.d/pgdg-source.list
 
 install:
   # Install ansible
   - pip install ansible
 
 script:
-  - sudo dpkg -l | grep postgresql
-  - ls -la /etc/apt/sources.list.d/
-  - cat /etc/apt/sources.list.d/pgdg-source.list
-
   # Check ansible version
   - ansible --version
 
@@ -43,7 +40,4 @@ script:
 
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  # - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
-
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
