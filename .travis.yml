@@ -20,6 +20,12 @@ addons:
     - python-pip
     - python-apt
 
+before_install:
+  - sudo apt-get purge pgdg-keyring
+  - sudo apt-get autoremove
+  - sudo rm -rf /var/lib/postgresql
+  - sudo rm -rf /etc/postgresql
+
 install:
   # Install ansible
   - pip install ansible
@@ -27,6 +33,8 @@ install:
 script:
   - sudo dpkg -l | grep postgresql
   - cat tests/inventory
+  - ls -la
+  - ls -la tests/
 
   # Check ansible version
   - ansible --version
