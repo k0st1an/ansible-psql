@@ -22,6 +22,7 @@
     state: latest
   with_items:
     - "postgresql-{{ psql_version }}"
+    - "postgresql-contrib-{{ psql_version }}"
     - sudo
     - python-psycopg2
 
