@@ -9,6 +9,7 @@ branches:
 
 # Use the new container infrastructure
 sudo: required
+dist: trusty
 
 virtualenv:
   system_site_packages: true
