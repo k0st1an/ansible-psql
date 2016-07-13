@@ -1,7 +1,7 @@
 ---
 # file: tasks/main.yml
 
-- name: Define service name for Ubuntu
+- name: Define service name in Ubuntu
   set_fact:
     psql_service_name: "postgresql"
   when: ansible_distribution == 'Ubuntu'
