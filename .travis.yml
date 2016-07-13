@@ -32,9 +32,8 @@ install:
 
 script:
   - sudo dpkg -l | grep postgresql
-  - cat tests/inventory
-  - ls -la
-  - ls -la tests/
+  - ls -la /etc/apt/sources.list.d/
+  - cat /etc/apt/sources.list.d/pgdg-source.list
 
   # Check ansible version
   - ansible --version
