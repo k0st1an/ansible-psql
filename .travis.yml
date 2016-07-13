@@ -26,7 +26,6 @@ before_install:
   - sudo apt-get -y autoremove
   - sudo rm -rf /var/lib/postgresql
   - sudo rm -rf /etc/postgresql
-  - sudo rm /etc/apt/sources.list.d/pgdg-source.list
 
 install:
   # Install ansible
