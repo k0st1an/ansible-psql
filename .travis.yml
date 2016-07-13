@@ -10,6 +10,9 @@ branches:
 # Use the new container infrastructure
 sudo: required
 
+virtualenv:
+  system_site_packages: true
+
 # Install ansible
 addons:
   apt:
