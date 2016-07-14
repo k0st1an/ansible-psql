@@ -5,6 +5,11 @@ ansible-psql
 
 Deploy PostgreSQL.
 
+Tested
+------
+
+PostgreSQL v9.1/2/3/4/5
+
 
 Role Variables
 --------------

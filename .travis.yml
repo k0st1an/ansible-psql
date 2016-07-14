@@ -11,6 +11,14 @@ branches:
 sudo: required
 dist: trusty
 
+env:
+  matrix:
+    - PSQL_VERSION="psql_version=9.1"
+    - PSQL_VERSION="psql_version=9.2"
+    - PSQL_VERSION="psql_version=9.3"
+    - PSQL_VERSION="psql_version=9.4"
+    - PSQL_VERSION="psql_version=9.5"
+
 virtualenv:
   system_site_packages: true
 
@@ -40,4 +48,4 @@ script:
 
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become
+  - ansible-playbook tests/test.yml -i tests/inventory --connection=local --become -e "$PSQL_VERSION"

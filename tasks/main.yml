@@ -36,7 +36,7 @@
   tags:
     - psql-postgresql-conf
   template:
-    src: postgresql.conf.j2
+    src: "postgresql_{{ psql_version }}.conf.j2"
     dest: "/etc/postgresql/{{ psql_version }}/main/postgresql.conf"
     owner: "{{ psql_admin_user }}"
     group: "{{ psql_admin_user }}"
