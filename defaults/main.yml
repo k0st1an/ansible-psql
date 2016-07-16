@@ -24,3 +24,5 @@ psql_listen_address:
   - "localhost"   # *, localhost, 127.0.0.1
 psql_listen_port:   5432
 psql_ssl:           "true"
+psql_timezone:      "UTC"
+psql_log_timezone:  "{{ psql_timezone }}"
