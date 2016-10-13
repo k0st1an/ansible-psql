@@ -18,6 +18,7 @@ env:
     - PSQL_VERSION="psql_version=9.3"
     - PSQL_VERSION="psql_version=9.4"
     - PSQL_VERSION="psql_version=9.5"
+    - PSQL_VERSION="psql_version=9.6"
 
 virtualenv:
   system_site_packages: true

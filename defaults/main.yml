@@ -1,7 +1,7 @@
 ---
 # file: defaults/main.yml
 
-psql_version:       "9.5"
+psql_version:       "9.6"
 psql_encoding:      "UTF-8"
 psql_locale:        "en_US.UTF-8"
 psql_admin_user:    "postgres"
